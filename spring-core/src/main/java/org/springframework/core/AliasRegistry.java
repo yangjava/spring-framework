@@ -32,6 +32,7 @@ public interface AliasRegistry {
 	 * @throws IllegalStateException if the alias is already in use
 	 * and may not be overridden
 	 */
+	// 将name和alias注册
 	void registerAlias(String name, String alias);
 
 	/**

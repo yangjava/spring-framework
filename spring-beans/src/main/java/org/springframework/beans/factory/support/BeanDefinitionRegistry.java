@@ -45,6 +45,11 @@ import org.springframework.core.AliasRegistry;
  * @see org.springframework.beans.factory.xml.XmlBeanDefinitionReader
  * @see PropertiesBeanDefinitionReader
  */
+
+/**
+ * BeanDefinitionRegistry是一个接口，他有三个实现类，
+ * DefaultListableBeanFactory、SimpleBeanDefinitionRegistry、GenericApplicationContext
+ */
 public interface BeanDefinitionRegistry extends AliasRegistry {
 
 	/**

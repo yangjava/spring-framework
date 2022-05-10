@@ -50,6 +50,13 @@ import org.springframework.core.io.Resource;
  * @deprecated as of Spring 3.1 in favor of {@link DefaultListableBeanFactory} and
  * {@link XmlBeanDefinitionReader}
  */
+
+/**
+ * XmlBeanFactory，只是提供了最基本的IOC容器的功能。
+ * 而且XMLBeanFactory,继承自DefaultListableBeanFactory。
+ * DefaultListableBeanFactory实际包含了基本IOC容器所具有的所有重要功能，
+ * 是一个完整的IOC容器。
+ */
 @Deprecated
 @SuppressWarnings({"serial", "all"})
 public class XmlBeanFactory extends DefaultListableBeanFactory {

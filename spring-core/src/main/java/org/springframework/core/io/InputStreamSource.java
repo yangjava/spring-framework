@@ -33,7 +33,7 @@ import java.io.InputStream;
  *
  * @author Juergen Hoeller
  * @since 20.01.2004
- * @see java.io.InputStream
+ * @see InputStream
  * @see Resource
  * @see InputStreamResource
  * @see ByteArrayResource
@@ -52,6 +52,8 @@ public interface InputStreamSource {
 	 * @throws IOException if the content stream could not be opened
 	 * @see Resource#isReadable()
 	 */
+	//找到并打开资源，返回一个InputStream以从资源中读取。
+	// 预计每次调用都会返回一个新的InputStream()，调用者有责任关闭每个流
 	InputStream getInputStream() throws IOException;
 
 }

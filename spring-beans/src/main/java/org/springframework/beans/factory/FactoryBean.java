@@ -62,6 +62,19 @@ import org.springframework.lang.Nullable;
  * @see org.springframework.aop.framework.ProxyFactoryBean
  * @see org.springframework.jndi.JndiObjectFactoryBean
  */
+
+/**
+ * Spring为此提供了一个org.springframework.bean.factory.FactoryBean的工厂类接口，
+ * 用户可以通过实现该接口定制实例化Bean的逻辑。
+ * FactoryBean接口对于Spring框架来说占用重要的地位，
+ * Spring自身就提供了70多个FactoryBean的实现。
+ * 它们隐藏了实例化一些复杂Bean的细节，给上层应用带来了便利。
+ * 从Spring3.0开始，FactoryBean开始支持泛型，即接口声明改为FactoryBean<T>的形式。
+ * 以Bean结尾，表示它是一个Bean，不同于普通Bean的是：
+ * 它是实现了FactoryBean<T>接口的Bean，
+ * 根据该Bean的ID从BeanFactory中获取的实际上是FactoryBean的getObject()返回的对象，
+ * 而不是FactoryBean本身，如果要获取FactoryBean对象，请在id前面加一个&符号来获取。
+ */
 public interface FactoryBean<T> {
 
 	/**
@@ -92,6 +105,8 @@ public interface FactoryBean<T> {
 	 * @throws Exception in case of creation errors
 	 * @see FactoryBeanNotInitializedException
 	 */
+	// 返回由FactoryBean创建的Bean实例，
+	// 如果isSingleton()返回true，则该实例会放到Spring容器中单实例缓存池中；
 	@Nullable
 	T getObject() throws Exception;
 
@@ -114,6 +129,7 @@ public interface FactoryBean<T> {
 	 * or {@code null} if not known at the time of the call
 	 * @see ListableBeanFactory#getBeansOfType
 	 */
+	// 返回FactoryBean创建的Bean类型。
 	@Nullable
 	Class<?> getObjectType();
 
@@ -142,6 +158,7 @@ public interface FactoryBean<T> {
 	 * @see #getObject()
 	 * @see SmartFactoryBean#isPrototype()
 	 */
+	// 返回由FactoryBean创建的Bean实例的作用域是singleton还是prototype；
 	default boolean isSingleton() {
 		return true;
 	}

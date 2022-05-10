@@ -117,6 +117,23 @@ import org.springframework.lang.Nullable;
  * @see DisposableBean#destroy
  * @see org.springframework.beans.factory.support.RootBeanDefinition#getDestroyMethodName
  */
+
+/**
+ * BeanFactory，以Factory结尾，表示它是一个工厂类(接口)，它负责生产和管理bean的一个工厂。
+ * 在Spring中，BeanFactory是IOC容器的核心接口，
+ * 它的职责包括：实例化、定位、配置应用程序中的对象及建立这些对象间的依赖。
+ * BeanFactory只是个接口，并不是IOC容器的具体实现，
+ * 但是Spring容器给出了很多种实现，
+ * 如 DefaultListableBeanFactory、XmlBeanFactory、ApplicationContext等，
+ * 其中XmlBeanFactory就是常用的一个，该实现将以XML方式描述组成应用的对象及对象间的依赖关系。
+ * XmlBeanFactory类将持有此XML配置元数据，并用它来构建一个完全可配置的系统或应用。
+ *
+ * BeanFactory是Spring IOC容器的鼻祖，是IOC容器的基础接口，所有的容器都是从它这里继承实现而来。
+ * 可见其地位。BeanFactory提供了最基本的IOC容器的功能，即所有的容器至少需要实现的标准。
+ *
+ * BeanFactory体系结构是典型的工厂方法模式，即什么样的工厂生产什么样的产品。
+ * BeanFactory是最基本的抽象工厂，而其他的IOC容器只不过是具体的工厂，对应着各自的Bean定义方法。
+ */
 public interface BeanFactory {
 
 	/**
@@ -140,6 +157,9 @@ public interface BeanFactory {
 	 * @throws NoSuchBeanDefinitionException if there is no bean with the specified name
 	 * @throws BeansException if the bean could not be obtained
 	 */
+	// 返回给定名称注册的bean实例。
+	// 根据bean的配置情况，如果是singleton模式将返回一个共享实例，
+	// 否则将返回一个新建的实例，如果没有找到指定bean,该方法可能会抛出异常
 	Object getBean(String name) throws BeansException;
 
 	/**
@@ -157,6 +177,7 @@ public interface BeanFactory {
 	 * @throws BeanNotOfRequiredTypeException if the bean is not of the required type
 	 * @throws BeansException if the bean could not be created
 	 */
+	// 返回以给定名称注册的bean实例，并转换为给定class类型
 	<T> T getBean(String name, Class<T> requiredType) throws BeansException;
 
 	/**
@@ -260,6 +281,7 @@ public interface BeanFactory {
 	 * @param name the name of the bean to query
 	 * @return whether a bean with the given name is present
 	 */
+	// 判断工厂中是否包含给定名称的bean定义，若有则返回true
 	boolean containsBean(String name);
 
 	/**
@@ -277,6 +299,7 @@ public interface BeanFactory {
 	 * @see #getBean
 	 * @see #isPrototype
 	 */
+	// 判断给定名称的bean定义是否为单例模式
 	boolean isSingleton(String name) throws NoSuchBeanDefinitionException;
 
 	/**
@@ -346,6 +369,7 @@ public interface BeanFactory {
 	 * @see #getBean
 	 * @see #isTypeMatch
 	 */
+	// 返回给定名称的bean的Class,如果没有找到指定的bean实例，则排除NoSuchBeanDefinitionException异常
 	@Nullable
 	Class<?> getType(String name) throws NoSuchBeanDefinitionException;
 
@@ -381,6 +405,7 @@ public interface BeanFactory {
 	 * @return the aliases, or an empty array if none
 	 * @see #getBean
 	 */
+	// 返回给定bean名称的所有别名
 	String[] getAliases(String name);
 
 }

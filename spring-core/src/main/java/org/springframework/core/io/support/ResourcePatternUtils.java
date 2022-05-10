@@ -38,10 +38,12 @@ public abstract class ResourcePatternUtils {
 	 * @param resourceLocation the location String to check
 	 * @return whether the location qualifies as a URL
 	 * @see ResourcePatternResolver#CLASSPATH_ALL_URL_PREFIX
-	 * @see org.springframework.util.ResourceUtils#CLASSPATH_URL_PREFIX
-	 * @see org.springframework.util.ResourceUtils#isUrl(String)
+	 * @see ResourceUtils#CLASSPATH_URL_PREFIX
+	 * @see ResourceUtils#isUrl(String)
 	 * @see java.net.URL
 	 */
+	// 以 classpath*: 或者 classpath: 开头为绝对路径
+	// 能够通过该 location 构建出 `java.net.URL`为绝对路径
 	public static boolean isUrl(@Nullable String resourceLocation) {
 		return (resourceLocation != null &&
 				(resourceLocation.startsWith(ResourcePatternResolver.CLASSPATH_ALL_URL_PREFIX) ||
