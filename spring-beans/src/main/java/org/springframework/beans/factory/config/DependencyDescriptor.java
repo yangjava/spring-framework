@@ -16,19 +16,8 @@
 
 package org.springframework.beans.factory.config;
 
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.Serializable;
-import java.lang.annotation.Annotation;
-import java.lang.reflect.Field;
-import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
-import java.util.Map;
-import java.util.Optional;
-
 import kotlin.reflect.KProperty;
 import kotlin.reflect.jvm.ReflectJvmMapping;
-
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.InjectionPoint;
@@ -40,6 +29,16 @@ import org.springframework.core.ResolvableType;
 import org.springframework.core.convert.TypeDescriptor;
 import org.springframework.lang.Nullable;
 import org.springframework.util.ObjectUtils;
+
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.Serializable;
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Field;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
+import java.util.Map;
+import java.util.Optional;
 
 /**
  * Descriptor for a specific dependency that is about to be injected.
@@ -159,7 +158,7 @@ public class DependencyDescriptor extends InjectionPoint implements Serializable
 
 	/**
 	 * Return whether this dependency is required.
-	 * <p>Optional semantics are derived from Java 8's {@link java.util.Optional},
+	 * <p>Optional semantics are derived from Java 8's {@link Optional},
 	 * any variant of a parameter-level {@code Nullable} annotation (such as from
 	 * JSR-305 or the FindBugs set of annotations), or a language-level nullable
 	 * type declaration in Kotlin.
@@ -270,6 +269,7 @@ public class DependencyDescriptor extends InjectionPoint implements Serializable
 	 * @since 4.3.2
 	 * @see BeanFactory#getBean(String)
 	 */
+	// 通过类型找到beanName,然后再找到其实例
 	public Object resolveCandidate(String beanName, Class<?> requiredType, BeanFactory beanFactory)
 			throws BeansException {
 
