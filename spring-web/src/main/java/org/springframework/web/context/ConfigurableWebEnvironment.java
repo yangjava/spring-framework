@@ -32,6 +32,8 @@ import org.springframework.lang.Nullable;
  * @since 3.1.2
  * @see ConfigurableWebApplicationContext#getEnvironment()
  */
+// 继承自ConfigurableEnvironment，
+// 并且提供配置Servlet上下文和Servlet参数的功能。
 public interface ConfigurableWebEnvironment extends ConfigurableEnvironment {
 
 	/**

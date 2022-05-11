@@ -33,6 +33,7 @@ import java.lang.annotation.Target;
  * @author Sam Brannen
  * @since 4.1
  */
+// 可以在类级别上标注一些公用的缓存属性，所有方法共享。
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
 @Documented

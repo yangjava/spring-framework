@@ -27,6 +27,8 @@ import org.springframework.lang.Nullable;
  * @see Environment
  * @see PropertySourcesPropertyResolver
  */
+// Resolver 美[rɪ'zɒlvə],英[rɪ'zɒlvə],n. 旋转变压器;解析器;解决者;解算器; 网络释义: 分解器;解析程序;解析程式;
+// 提供属性访问功能。
 public interface PropertyResolver {
 
 	/**

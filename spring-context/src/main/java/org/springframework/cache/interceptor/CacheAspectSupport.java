@@ -84,14 +84,17 @@ public abstract class CacheAspectSupport extends AbstractCacheInvoker
 		implements BeanFactoryAware, InitializingBean, SmartInitializingSingleton {
 
 	protected final Log logger = LogFactory.getLog(getClass());
-
+    // 这个 Map 缓存了所有被注解修饰的类或者方法对应的基本属性信息。
 	private final Map<CacheOperationCacheKey, CacheOperationMetadata> metadataCache = new ConcurrentHashMap<>(1024);
-
+	// 解析一些 condition、key、unless 等可以写 el 表达式的处理器。
 	private final CacheOperationExpressionEvaluator evaluator = new CacheOperationExpressionEvaluator();
 
 	@Nullable
 	private CacheOperationSource cacheOperationSource;
-
+    // key 生成器默认使用的 SimpleKeyGenerator，
+	// 注意 SingletonSupplier 是 Spring5.1 的新类，
+	// 实现了接口java.util.function.Supplier ，
+	// 主要是对 null 值进行容错。
 	private SingletonSupplier<KeyGenerator> keyGenerator = SingletonSupplier.of(SimpleKeyGenerator::new);
 
 	@Nullable
@@ -210,7 +213,9 @@ public abstract class CacheAspectSupport extends AbstractCacheInvoker
 		Assert.state(getCacheOperationSource() != null, "The 'cacheOperationSources' property is required: " +
 				"If there are no cacheable methods, then don't use a cache aspect.");
 	}
-
+    // 这个接口来自于 SmartInitializingSingleton
+	// 在实例化完所有单例Bean后调用
+	//可以看到在这里实例化 CacheManager
 	@Override
 	public void afterSingletonsInstantiated() {
 		if (getCacheResolver() == null) {

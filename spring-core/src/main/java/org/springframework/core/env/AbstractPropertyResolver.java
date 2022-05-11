@@ -39,25 +39,26 @@ import org.springframework.util.SystemPropertyUtils;
  * @author Juergen Hoeller
  * @since 3.1
  */
+// 属性占位符的解析方法是PropertySourcesPropertyResolver的父类AbstractPropertyResolver
 public abstract class AbstractPropertyResolver implements ConfigurablePropertyResolver {
 
 	protected final Log logger = LogFactory.getLog(getClass());
 
 	@Nullable
 	private volatile ConfigurableConversionService conversionService;
-
+    // //ignoreUnresolvableNestedPlaceholders=true情况下创建的PropertyPlaceholderHelper实例
 	@Nullable
 	private PropertyPlaceholderHelper nonStrictHelper;
-
+	//ignoreUnresolvableNestedPlaceholders=false情况下创建的PropertyPlaceholderHelper实例
 	@Nullable
 	private PropertyPlaceholderHelper strictHelper;
-
+    // ignoreUnresolvableNestedPlaceholders属性默认为false
 	private boolean ignoreUnresolvableNestedPlaceholders = false;
-
+	//属性占位符前缀，这里是"${"
 	private String placeholderPrefix = SystemPropertyUtils.PLACEHOLDER_PREFIX;
-
+	//属性占位符后缀，这里是"}"
 	private String placeholderSuffix = SystemPropertyUtils.PLACEHOLDER_SUFFIX;
-
+	//属性占位符解析失败的时候配置默认值的分隔符，这里是":"
 	@Nullable
 	private String valueSeparator = SystemPropertyUtils.VALUE_SEPARATOR;
 
@@ -226,15 +227,29 @@ public abstract class AbstractPropertyResolver implements ConfigurablePropertyRe
 		if (value.isEmpty()) {
 			return value;
 		}
+		// ignoreUnresolvableNestedPlaceholders属性默认为false，
+		// 可以通过AbstractEnvironment#setIgnoreUnresolvableNestedPlaceholders(boolean ignoreUnresolvableNestedPlaceholders)设置，
+		// 当此属性被设置为true，解析属性占位符失败的时候(并且没有为占位符配置默认值)不会抛出异常，返回属性原样字符串，
+		// 否则会抛出IllegalArgumentException。
 		return (this.ignoreUnresolvableNestedPlaceholders ?
 				resolvePlaceholders(value) : resolveRequiredPlaceholders(value));
 	}
-
+	//创建一个新的PropertyPlaceholderHelper实例，这里ignoreUnresolvablePlaceholders为false
 	private PropertyPlaceholderHelper createPlaceholderHelper(boolean ignoreUnresolvablePlaceholders) {
 		return new PropertyPlaceholderHelper(this.placeholderPrefix, this.placeholderSuffix,
 				this.valueSeparator, ignoreUnresolvablePlaceholders);
 	}
+	//这里最终的解析工作委托到PropertyPlaceholderHelper#replacePlaceholders完成
 
+	/**
+	 * 注意到这里的第一个参数text就是属性值的源字符串，
+	 * 例如我们需要处理的属性为myProperties: ${server.port}-${spring.application.name}，
+	 * 这里的text就是${server.port}-${spring.application.name}。
+	 *
+	 * replacePlaceholders方法的第二个参数placeholderResolver，
+	 * 这里的方法引用this::getPropertyAsRawString
+	 *
+	 */
 	private String doResolvePlaceholders(String text, PropertyPlaceholderHelper helper) {
 		return helper.replacePlaceholders(text, this::getPropertyAsRawString);
 	}
@@ -247,6 +262,7 @@ public abstract class AbstractPropertyResolver implements ConfigurablePropertyRe
 	 * is necessary
 	 * @since 4.3.5
 	 */
+	// 属性字符串值，可以把字符串转换为指定的类型，此功能由AbstractPropertyResolver#convertValueIfNecessary完成
 	@SuppressWarnings("unchecked")
 	@Nullable
 	protected <T> T convertValueIfNecessary(Object value, @Nullable Class<T> targetType) {
@@ -257,6 +273,7 @@ public abstract class AbstractPropertyResolver implements ConfigurablePropertyRe
 		if (conversionServiceToUse == null) {
 			// Avoid initialization of shared DefaultConversionService if
 			// no standard type conversion is needed in the first place...
+			// 这里一般只有字符串类型才会命中
 			if (ClassUtils.isAssignableValue(targetType, value)) {
 				return (T) value;
 			}

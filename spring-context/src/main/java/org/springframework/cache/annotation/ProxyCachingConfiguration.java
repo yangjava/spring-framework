@@ -38,7 +38,8 @@ import org.springframework.context.annotation.Role;
 @Configuration(proxyBeanMethods = false)
 @Role(BeanDefinition.ROLE_INFRASTRUCTURE)
 public class ProxyCachingConfiguration extends AbstractCachingConfiguration {
-
+    // BeanFactoryCacheOperationSourceAdvisor 是 Spring Cache 自己实现的 Advisor，
+	// 会对所有能取出 CacheOperation 的方法执行 CacheInterceptor 这个 Advice。
 	@Bean(name = CacheManagementConfigUtils.CACHE_ADVISOR_BEAN_NAME)
 	@Role(BeanDefinition.ROLE_INFRASTRUCTURE)
 	public BeanFactoryCacheOperationSourceAdvisor cacheAdvisor(

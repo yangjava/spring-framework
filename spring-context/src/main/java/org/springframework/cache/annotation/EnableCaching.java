@@ -166,6 +166,8 @@ import org.springframework.core.Ordered;
  * @see ProxyCachingConfiguration
  * @see org.springframework.cache.aspectj.AspectJCachingConfiguration
  */
+// 通过在启动类上添加 EnableCaching 注解将 Cache 相关的组件注入到 Spring 启动中，
+// 通过 Proxy 或者 AspectJ 的方式获取 Cache 对应的执行信息。
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
@@ -183,6 +185,7 @@ public @interface EnableCaching {
 	 * impact in practice unless one is explicitly expecting one type of proxy vs another,
 	 * e.g. in tests.
 	 */
+	// false，表示使用 JDK 代理，true 表示使用 cglib 代理。
 	boolean proxyTargetClass() default false;
 
 	/**
@@ -195,6 +198,9 @@ public @interface EnableCaching {
 	 * For a more advanced mode of interception, consider switching this to
 	 * {@link AdviceMode#ASPECTJ}.
 	 */
+	// 指定 AOP 的模式，
+	// 当值为 AdviceMode.PROXY 时表示使用 Spring aop，
+	// 当值为当值为AdviceMode.ASPECTJ 时，表示使用 AspectJ。
 	AdviceMode mode() default AdviceMode.PROXY;
 
 	/**

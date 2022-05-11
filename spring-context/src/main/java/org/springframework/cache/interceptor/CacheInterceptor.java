@@ -43,7 +43,9 @@ import org.springframework.util.Assert;
  */
 @SuppressWarnings("serial")
 public class CacheInterceptor extends CacheAspectSupport implements MethodInterceptor, Serializable {
-
+    // CacheInterceptor 代码很简洁，
+	// 采用函数的形式封装了真正要执行的函数逻辑，
+	// 最终把此函数传交给父类的 execute()去执行。
 	@Override
 	@Nullable
 	public Object invoke(final MethodInvocation invocation) throws Throwable {

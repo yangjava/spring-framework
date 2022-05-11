@@ -187,9 +187,12 @@ public class GenericConversionService implements ConfigurableConversionService {
 			throw new IllegalArgumentException("Source to convert from must be an instance of [" +
 					sourceType + "]; instead it was a [" + source.getClass().getName() + "]");
 		}
+		// 从缓存中获取GenericConverter实例，其实这一步相对复杂，匹配两个类型的时候，会解析整个类的层次进行对比
 		GenericConverter converter = getConverter(sourceType, targetType);
 		if (converter != null) {
+			// 实际上就是调用转换方法
 			Object result = ConversionUtils.invokeConverter(converter, source, sourceType, targetType);
+			// 断言最终结果和指定类型是否匹配并且返回
 			return handleResult(sourceType, targetType, result);
 		}
 		return handleConverterNotFound(source, sourceType, targetType);

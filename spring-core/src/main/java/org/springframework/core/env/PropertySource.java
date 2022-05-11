@@ -57,6 +57,17 @@ import org.springframework.util.ObjectUtils;
  * @see MutablePropertySources
  * @see org.springframework.context.annotation.PropertySource
  */
+
+/**
+ * PropertySource的最常用子类是MapPropertySource、PropertiesPropertySource、ResourcePropertySource、StubPropertySource、ComparisonPropertySource：
+ *
+ * MapPropertySource：source指定为Map实例的PropertySource实现。
+ * PropertiesPropertySource：source指定为Map实例的PropertySource实现，内部的Map实例由Properties实例转换而来。
+ * ResourcePropertySource：继承自PropertiesPropertySource，source指定为通过Resource实例转化为Properties再转换为Map实例。
+ * StubPropertySource：PropertySource的一个内部类，source设置为null，实际上就是空实现。
+ * ComparisonPropertySource：继承自ComparisonPropertySource，所有属性访问方法强制抛出异常，作用就是一个不可访问属性的空实现。
+ *
+ */
 public abstract class PropertySource<T> {
 
 	protected final Log logger = LogFactory.getLog(getClass());
@@ -203,6 +214,7 @@ public abstract class PropertySource<T> {
 	 * @see org.springframework.web.context.support.StandardServletEnvironment
 	 * @see org.springframework.web.context.support.ServletContextPropertySource
 	 */
+	// PropertySource的一个内部类，source设置为null，实际上就是空实现。
 	public static class StubPropertySource extends PropertySource<Object> {
 
 		public StubPropertySource(String name) {
@@ -226,6 +238,8 @@ public abstract class PropertySource<T> {
 	 *
 	 * @see PropertySource#named(String)
 	 */
+	// 继承自ComparisonPropertySource，所有属性访问方法强制抛出异常，
+	// 作用就是一个不可访问属性的空实现。
 	static class ComparisonPropertySource extends StubPropertySource {
 
 		private static final String USAGE_ERROR =

@@ -83,6 +83,8 @@ abstract class CacheOperationSourcePointcut extends StaticMethodMatcherPointcut 
 	 * {@link ClassFilter} that delegates to {@link CacheOperationSource#isCandidateClass}
 	 * for filtering classes whose methods are not worth searching to begin with.
 	 */
+	// 可以看到切入点主要就是判断被切入的方法上是否有注解：
+	// CacheOperationSourcePointcut.this.getCacheOperationSource()。
 	private class CacheOperationSourceClassFilter implements ClassFilter {
 
 		@Override

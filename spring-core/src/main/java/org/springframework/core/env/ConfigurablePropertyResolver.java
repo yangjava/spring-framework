@@ -28,6 +28,8 @@ import org.springframework.lang.Nullable;
  * @author Chris Beams
  * @since 3.1
  */
+// 继承自PropertyResolver，
+// 主要提供属性类型转换(基于org.springframework.core.convert.ConversionService)功能。
 public interface ConfigurablePropertyResolver extends PropertyResolver {
 
 	/**

@@ -69,6 +69,8 @@ import java.util.Map;
  * @see StandardEnvironment
  * @see org.springframework.context.ConfigurableApplicationContext#getEnvironment
  */
+// 继承自ConfigurablePropertyResolver和Environment，
+// 并且提供设置激活的profile和默认的profile的功能。
 public interface ConfigurableEnvironment extends Environment, ConfigurablePropertyResolver {
 
 	/**
@@ -116,6 +118,8 @@ public interface ConfigurableEnvironment extends Environment, ConfigurableProper
 	 * variables.
 	 * @see AbstractEnvironment#customizePropertySources
 	 */
+	// 可以获取到返回的MutablePropertySources实例，
+	// 然后添加额外的PropertySource。
 	MutablePropertySources getPropertySources();
 
 	/**

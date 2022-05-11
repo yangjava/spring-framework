@@ -38,6 +38,7 @@ import org.springframework.util.StringUtils;
  * @see EnableCaching
  * @see ProxyCachingConfiguration
  */
+// 可以看到主要做了一件事，通过代理方式的不同加载对应的 CacheConfiguration
 public class CachingConfigurationSelector extends AdviceModeImportSelector<EnableCaching> {
 
 	private static final String PROXY_JCACHE_CONFIGURATION_CLASS =
@@ -66,6 +67,8 @@ public class CachingConfigurationSelector extends AdviceModeImportSelector<Enabl
 	 * for {@code PROXY} and {@code ASPECTJ} values of {@link EnableCaching#mode()},
 	 * respectively. Potentially includes corresponding JCache configuration as well.
 	 */
+	//如果是 JDK Proxy，加载 AutoProxyRegistrar 类和 ProxyCachingConfiguration 类；
+	//如果是 AspectJ，则加载 AspectJCachingConfiguration 类。
 	@Override
 	public String[] selectImports(AdviceMode adviceMode) {
 		switch (adviceMode) {

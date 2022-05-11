@@ -42,6 +42,8 @@ import org.springframework.util.StringUtils;
  * @see org.springframework.core.io.Resource
  * @see org.springframework.core.io.support.EncodedResource
  */
+// 继承自PropertiesPropertySource，
+// source指定为通过Resource实例转化为Properties再转换为Map实例。
 public class ResourcePropertySource extends PropertiesPropertySource {
 
 	/** The original resource name, if different from the given name. */

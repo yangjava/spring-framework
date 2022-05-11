@@ -33,6 +33,8 @@ import java.util.Properties;
  * @author Juergen Hoeller
  * @since 3.1
  */
+// source指定为Map实例的PropertySource实现，
+// 内部的Map实例由Properties实例转换而来。
 public class PropertiesPropertySource extends MapPropertySource {
 
 	@SuppressWarnings({"rawtypes", "unchecked"})

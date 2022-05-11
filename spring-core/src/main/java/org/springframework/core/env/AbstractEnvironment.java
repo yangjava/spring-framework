@@ -53,6 +53,9 @@ import org.springframework.util.StringUtils;
  * @see ConfigurableEnvironment
  * @see StandardEnvironment
  */
+// 实现了ConfigurableEnvironment接口，
+// 默认属性和存储容器的定义，并且实现了ConfigurableEnvironment种的方法，
+// 并且为子类预留可覆盖了扩展方法。
 public abstract class AbstractEnvironment implements ConfigurableEnvironment {
 
 	/**

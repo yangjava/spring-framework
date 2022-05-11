@@ -45,15 +45,18 @@ public class SimpleKeyGenerator implements KeyGenerator {
 	 * Generate a key based on the specified parameters.
 	 */
 	public static Object generateKey(Object... params) {
+		// 如果方法没有入参则抛异常，即必须要有入参才能构建 key；
 		if (params.length == 0) {
 			return SimpleKey.EMPTY;
 		}
+		// 如果只有一个入参，则使用该入参作为 key=入参值。
 		if (params.length == 1) {
 			Object param = params[0];
 			if (param != null && !param.getClass().isArray()) {
 				return param;
 			}
 		}
+		// 如果有多个入参则返回包含所有入参的构造函数 new SimpleKey(params)。
 		return new SimpleKey(params);
 	}
 

@@ -68,6 +68,9 @@ package org.springframework.core.env;
  * @see org.springframework.context.ConfigurableApplicationContext#setEnvironment
  * @see org.springframework.context.support.AbstractApplicationContext#createEnvironment
  */
+// Environment是当前应用运行环境的公开接口，提供访问和判断profiles的功能。
+// 主要包括应用程序运行环境的两个关键方面：配置文件(profiles)和属性。
+// Environment继承自接口PropertyResolver，而PropertyResolver提供了属性访问的相关方法。
 public interface Environment extends PropertyResolver {
 
 	/**

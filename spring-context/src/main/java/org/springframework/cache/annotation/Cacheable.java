@@ -54,6 +54,7 @@ import org.springframework.core.annotation.AliasFor;
  * @since 3.1
  * @see CacheConfig
  */
+// 在调用方法的同时能够根据方法的请求参数对结果进行缓存。
 @Target({ElementType.TYPE, ElementType.METHOD})
 @Retention(RetentionPolicy.RUNTIME)
 @Inherited
@@ -63,6 +64,8 @@ public @interface Cacheable {
 	/**
 	 * Alias for {@link #cacheNames}.
 	 */
+	//  cacheNames 和 value 这两个属性任意使用一个都可以，
+	//  它们的作用可以理解为 key 的前缀。
 	@AliasFor("cacheNames")
 	String[] value() default {};
 
@@ -94,6 +97,9 @@ public @interface Cacheable {
 	 * can also be accessed by name if that information is available.</li>
 	 * </ul>
 	 */
+	// key 和 keyGenerator 是互斥的一对。
+	// 当指定了 key 的时候就会使用你指定的 key + 参数 作为缓存 key。
+	// 否则则使用默认 keyGenerator(SimpleKeyGenerator)或者你自定义的 Generator 来生成 key。
 	String key() default "";
 
 	/**

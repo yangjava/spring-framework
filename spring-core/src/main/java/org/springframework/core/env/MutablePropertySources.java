@@ -39,6 +39,11 @@ import org.springframework.lang.Nullable;
  * @since 3.1
  * @see PropertySourcesPropertyResolver
  */
+// 这个就是最底层的存储容器，
+// 也就是环境属性都是存放在一个CopyOnWriteArrayList<PropertySource<?>>实例中。
+// MutablePropertySources是PropertySources的子类，
+// 它提供了get(String name)、addFirst、addLast、addBefore、addAfter、remove、replace等便捷方法，
+// 方便操作propertySourceList集合的元素
 public class MutablePropertySources implements PropertySources {
 
 	private final List<PropertySource<?>> propertySourceList = new CopyOnWriteArrayList<>();
@@ -124,10 +129,14 @@ public class MutablePropertySources implements PropertySources {
 	 * than the named relative property source.
 	 */
 	public void addBefore(String relativePropertySourceName, PropertySource<?> propertySource) {
+		//前一个PropertySource的name指定为relativePropertySourceName时候必须和添加的PropertySource的name属性不相同
 		assertLegalRelativeAddition(relativePropertySourceName, propertySource);
 		synchronized (this.propertySourceList) {
+			//尝试移除同名的PropertySource
 			removeIfPresent(propertySource);
+			//获取前一个PropertySource在CopyOnWriteArrayList中的索引
 			int index = assertPresentAndGetIndex(relativePropertySourceName);
+			//添加当前传入的PropertySource到指定前一个PropertySource的索引，相当于relativePropertySourceName对应的PropertySource后移到原来索引值+1的位置
 			addAtIndex(index, propertySource);
 		}
 	}
@@ -213,6 +222,7 @@ public class MutablePropertySources implements PropertySources {
 	 * Add the given property source at a particular index in the list.
 	 */
 	private void addAtIndex(int index, PropertySource<?> propertySource) {
+		//注意，这里会再次尝试移除同名的PropertySource
 		removeIfPresent(propertySource);
 		this.propertySourceList.add(index, propertySource);
 	}

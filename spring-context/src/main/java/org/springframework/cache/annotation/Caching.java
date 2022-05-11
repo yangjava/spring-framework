@@ -33,6 +33,7 @@ import java.lang.annotation.Target;
  * @author Chris Beams
  * @since 3.1
  */
+// 用于处理复杂的缓存情况，一次性设置多个缓存，作用于方法上。
 @Target({ElementType.TYPE, ElementType.METHOD})
 @Retention(RetentionPolicy.RUNTIME)
 @Inherited

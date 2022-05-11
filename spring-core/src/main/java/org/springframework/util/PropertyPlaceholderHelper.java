@@ -51,13 +51,13 @@ public class PropertyPlaceholderHelper {
 		wellKnownSimplePrefixes.put(")", "(");
 	}
 
-
+	//占位符前缀，默认是"${"
 	private final String placeholderPrefix;
-
+	//占位符后缀，默认是"}"
 	private final String placeholderSuffix;
 
 	private final String simplePrefix;
-
+	//默认值分隔符号，默认是":"
 	@Nullable
 	private final String valueSeparator;
 
@@ -109,6 +109,7 @@ public class PropertyPlaceholderHelper {
 	 * @param properties the {@code Properties} to use for replacement
 	 * @return the supplied value with placeholders replaced inline
 	 */
+	// 替换属性占位符
 	public String replacePlaceholders(String value, final Properties properties) {
 		Assert.notNull(properties, "'properties' must not be null");
 		return replacePlaceholders(value, properties::getProperty);
@@ -125,7 +126,7 @@ public class PropertyPlaceholderHelper {
 		Assert.notNull(value, "'value' must not be null");
 		return parseStringValue(value, placeholderResolver, null);
 	}
-
+	//递归解析带占位符的属性为字符串
 	protected String parseStringValue(
 			String value, PlaceholderResolver placeholderResolver, @Nullable Set<String> visitedPlaceholders) {
 
@@ -136,10 +137,13 @@ public class PropertyPlaceholderHelper {
 
 		StringBuilder result = new StringBuilder(value);
 		while (startIndex != -1) {
+			//搜索第一个占位符后缀的索引
 			int endIndex = findPlaceholderEndIndex(result, startIndex);
 			if (endIndex != -1) {
+				//提取第一个占位符中的原始字符串，如${server.port}->server.port
 				String placeholder = result.substring(startIndex + this.placeholderPrefix.length(), endIndex);
 				String originalPlaceholder = placeholder;
+				//判重
 				if (visitedPlaceholders == null) {
 					visitedPlaceholders = new HashSet<>(4);
 				}
@@ -148,68 +152,90 @@ public class PropertyPlaceholderHelper {
 							"Circular placeholder reference '" + originalPlaceholder + "' in property definitions");
 				}
 				// Recursive invocation, parsing placeholders contained in the placeholder key.
+				// 递归调用，实际上就是解析嵌套的占位符，因为提取的原始字符串有可能还有一层或者多层占位符
 				placeholder = parseStringValue(placeholder, placeholderResolver, visitedPlaceholders);
 				// Now obtain the value for the fully resolved key...
+				// 递归调用完毕后，可以确定得到的字符串一定是不带占位符，
+				// 这个时候调用getPropertyAsRawString获取key对应的字符串值
 				String propVal = placeholderResolver.resolvePlaceholder(placeholder);
+				// 如果字符串值为null，则进行默认值的解析，
+				// 因为默认值有可能也使用了占位符，如${server.port:${server.port-2:8080}}
 				if (propVal == null && this.valueSeparator != null) {
 					int separatorIndex = placeholder.indexOf(this.valueSeparator);
 					if (separatorIndex != -1) {
 						String actualPlaceholder = placeholder.substring(0, separatorIndex);
+						// 提取默认值的字符串
 						String defaultValue = placeholder.substring(separatorIndex + this.valueSeparator.length());
+						// 这里是把默认值的表达式做一次解析，解析到null，则直接赋值为defaultValue
 						propVal = placeholderResolver.resolvePlaceholder(actualPlaceholder);
 						if (propVal == null) {
 							propVal = defaultValue;
 						}
 					}
 				}
+				// 上一步解析出来的值不为null，但是它有可能是一个带占位符的值，所以后面对值进行递归解析
 				if (propVal != null) {
 					// Recursive invocation, parsing placeholders contained in the
 					// previously resolved placeholder value.
 					propVal = parseStringValue(propVal, placeholderResolver, visitedPlaceholders);
+					// 替换掉第一个被解析完毕的占位符属性，
+					// 例如${server.port}-${spring.application.name} -> 9090--${spring.application.name}
 					result.replace(startIndex, endIndex + this.placeholderSuffix.length(), propVal);
 					if (logger.isTraceEnabled()) {
 						logger.trace("Resolved placeholder '" + placeholder + "'");
 					}
+					// 重置startIndex为下一个需要解析的占位符前缀的索引，可能为-1，说明解析结束
 					startIndex = result.indexOf(this.placeholderPrefix, startIndex + propVal.length());
 				}
 				else if (this.ignoreUnresolvablePlaceholders) {
 					// Proceed with unprocessed value.
+					// 如果propVal为null并且ignoreUnresolvablePlaceholders设置为true，直接返回当前的占位符之间的原始字符串尾的索引，也就是跳过解析
 					startIndex = result.indexOf(this.placeholderPrefix, endIndex + this.placeholderSuffix.length());
 				}
 				else {
+					// 如果propVal为null并且ignoreUnresolvablePlaceholders设置为false，抛出异常
 					throw new IllegalArgumentException("Could not resolve placeholder '" +
 							placeholder + "'" + " in value \"" + value + "\"");
 				}
+				// 递归结束移除判重集合中的元素
 				visitedPlaceholders.remove(originalPlaceholder);
 			}
 			else {
+				// endIndex = -1说明解析结束
 				startIndex = -1;
 			}
 		}
 		return result.toString();
 	}
-
+	//基于传入的起始索引，搜索第一个占位符后缀的索引，兼容嵌套的占位符
 	private int findPlaceholderEndIndex(CharSequence buf, int startIndex) {
+		//这里index实际上就是实际需要解析的属性的第一个字符，如${server.port}，这里index指向s
 		int index = startIndex + this.placeholderPrefix.length();
 		int withinNestedPlaceholder = 0;
 		while (index < buf.length()) {
+			//index指向"}"，说明有可能到达占位符尾部或者嵌套占位符尾部
 			if (StringUtils.substringMatch(buf, index, this.placeholderSuffix)) {
+				//存在嵌套占位符，则返回字符串中占位符后缀的索引值
 				if (withinNestedPlaceholder > 0) {
 					withinNestedPlaceholder--;
 					index = index + this.placeholderSuffix.length();
 				}
 				else {
+					//不存在嵌套占位符，直接返回占位符尾部索引
 					return index;
 				}
 			}
+			//index指向"{"，记录嵌套占位符个数withinNestedPlaceholder加1，index更新为嵌套属性的第一个字符的索引
 			else if (StringUtils.substringMatch(buf, index, this.simplePrefix)) {
 				withinNestedPlaceholder++;
 				index = index + this.simplePrefix.length();
 			}
 			else {
+				//index不是"{"或者"}"，则进行自增
 				index++;
 			}
 		}
+		//这里说明解析索引已经超出了原字符串
 		return -1;
 	}
 

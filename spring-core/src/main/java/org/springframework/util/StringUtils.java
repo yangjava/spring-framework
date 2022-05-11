@@ -376,6 +376,7 @@ public abstract class StringUtils {
 	 * @param index the index in the original string to start matching against
 	 * @param substring the substring to match at the given index
 	 */
+	// //StringUtils#substringMatch，此方法会检查原始字符串str的index位置开始是否和子字符串substring完全匹配
 	public static boolean substringMatch(CharSequence str, int index, CharSequence substring) {
 		if (index + substring.length() > str.length()) {
 			return false;

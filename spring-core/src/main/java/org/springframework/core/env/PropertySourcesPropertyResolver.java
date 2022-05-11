@@ -74,20 +74,29 @@ public class PropertySourcesPropertyResolver extends AbstractPropertyResolver {
 		return getProperty(key, String.class, false);
 	}
 
+	/**
+	 * 如果出现多个PropertySource中存在同名的key，
+	 * 返回的是第一个PropertySource对应key的属性值的处理结果，
+	 * 因此我们如果需要自定义一些环境属性，需要十分清楚各个PropertySource的顺序。
+	 */
 	@Nullable
 	protected <T> T getProperty(String key, Class<T> targetValueType, boolean resolveNestedPlaceholders) {
 		if (this.propertySources != null) {
+			//遍历所有的PropertySource
 			for (PropertySource<?> propertySource : this.propertySources) {
 				if (logger.isTraceEnabled()) {
 					logger.trace("Searching for key '" + key + "' in PropertySource '" +
 							propertySource.getName() + "'");
 				}
 				Object value = propertySource.getProperty(key);
+				//选用第一个不为null的匹配key的属性值
 				if (value != null) {
 					if (resolveNestedPlaceholders && value instanceof String) {
+						//处理属性占位符，如${server.port}，底层委托到PropertyPlaceholderHelper完成
 						value = resolveNestedPlaceholders((String) value);
 					}
 					logKeyFound(key, propertySource, value);
+					//如果需要的话，进行一次类型转换，底层委托到DefaultConversionService完成
 					return convertValueIfNecessary(value, targetValueType);
 				}
 			}
