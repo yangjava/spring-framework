@@ -70,6 +70,7 @@ import org.springframework.util.IdGenerator;
  * @see org.springframework.messaging.support.MessageBuilder
  * @see org.springframework.messaging.support.MessageHeaderAccessor
  */
+// 消息头
 public class MessageHeaders implements Map<String, Object>, Serializable {
 
 	/**

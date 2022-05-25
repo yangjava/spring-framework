@@ -24,6 +24,7 @@ import org.springframework.lang.Nullable;
  * @author Mark Fisher
  * @since 4.0
  */
+// PollableChannel用来表示支持拉模型的通道，其中定义了receive方法用来支持MessageHandler主动拉取消息
 public interface PollableChannel extends MessageChannel {
 
 	/**

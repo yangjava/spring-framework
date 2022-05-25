@@ -25,11 +25,14 @@ package org.springframework.messaging;
  * @param <T> the payload type
  * @see org.springframework.messaging.support.MessageBuilder
  */
+// spring-messaging模块为集成messaging api和消息协议提供支持。
+// 消息Message(MessageHeaders和getPayload)
 public interface Message<T> {
 
 	/**
 	 * Return the message payload.
 	 */
+	// 消息体
 	T getPayload();
 
 	/**

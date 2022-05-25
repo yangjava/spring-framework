@@ -23,6 +23,7 @@ package org.springframework.messaging;
  * @author Mark Fisher
  * @since 4.0
  */
+// SubscribableChannel用来表示支持推模型（发布/订阅模型）的通道，其中定义了subscribe和unsubscribe方法用来支持MessageHandler的订阅和取消订阅；
 public interface SubscribableChannel extends MessageChannel {
 
 	/**

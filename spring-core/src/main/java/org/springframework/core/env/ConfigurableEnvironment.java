@@ -71,6 +71,7 @@ import java.util.Map;
  */
 // 继承自ConfigurablePropertyResolver和Environment，
 // 并且提供设置激活的profile和默认的profile的功能。
+// 继承于Environment接口，可以修改环境内部profile属性，达到区分线上环境功能。
 public interface ConfigurableEnvironment extends Environment, ConfigurablePropertyResolver {
 
 	/**

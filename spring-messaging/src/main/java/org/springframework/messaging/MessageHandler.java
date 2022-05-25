@@ -24,6 +24,7 @@ package org.springframework.messaging;
  * @since 4.0
  * @see ReactiveMessageHandler
  */
+// 消息处理MessageHandler
 @FunctionalInterface
 public interface MessageHandler {
 

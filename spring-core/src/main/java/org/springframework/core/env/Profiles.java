@@ -30,6 +30,7 @@ import java.util.function.Predicate;
  * @since 5.1
  */
 @FunctionalInterface
+// @Profile 表示当一个或多个profiles处于活动状态时，组件有资格注册。
 public interface Profiles {
 
 	/**

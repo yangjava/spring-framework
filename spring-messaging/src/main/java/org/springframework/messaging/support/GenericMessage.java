@@ -34,6 +34,7 @@ import org.springframework.util.ObjectUtils;
  * @param <T> the payload type
  * @see MessageBuilder
  */
+// 通用的消息实现
 public class GenericMessage<T> implements Message<T>, Serializable {
 
 	private static final long serialVersionUID = 4268801052358035098L;

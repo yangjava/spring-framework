@@ -38,6 +38,7 @@ package org.springframework.core.env;
  * @see ConfigurableEnvironment
  * @see org.springframework.context.ConfigurableApplicationContext#getEnvironment()
  */
+// 接口定义实际上就一个方法返回当前的环境变量。
 public interface EnvironmentCapable {
 
 	/**

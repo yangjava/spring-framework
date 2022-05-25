@@ -22,6 +22,7 @@ package org.springframework.messaging;
  * @author Mark Fisher
  * @since 4.0
  */
+// 发送消息MessageChannel,MessageChannel表现为pipes-and-filters架构的管道。
 @FunctionalInterface
 public interface MessageChannel {
 

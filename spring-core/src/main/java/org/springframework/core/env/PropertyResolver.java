@@ -29,6 +29,7 @@ import org.springframework.lang.Nullable;
  */
 // Resolver 美[rɪ'zɒlvə],英[rɪ'zɒlvə],n. 旋转变压器;解析器;解决者;解算器; 网络释义: 分解器;解析程序;解析程式;
 // 提供属性访问功能。
+// 资源解析器，它提供一系列关于资源文件的读取方法，比如通过key去获取资源文件的value，通过一个key和Class信息，去获取一个对应的且已根据资源文件初始化好的bean，另一个重要的功能是去解析占位符“${...}”信息。
 public interface PropertyResolver {
 
 	/**
